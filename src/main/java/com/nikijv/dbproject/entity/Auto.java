@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Auto {
-    private UUID id;
+
+    private int id;
     private String manufacturer;
     private String name;
     private int engineCapacity;

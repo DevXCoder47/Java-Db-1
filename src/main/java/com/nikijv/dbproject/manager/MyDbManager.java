@@ -1,5 +1,6 @@
 package com.nikijv.dbproject.manager;
 
+import com.nikijv.dbproject.executor.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ public class MyDbManager implements AutoCloseable {
         }
     }
 
-    public void createAutosTable(){
+    public void createAutosTable() {
         try(Statement statement = connection.createStatement()) {
             String checkTypeSql = """
             DO $$
@@ -28,6 +29,7 @@ public class MyDbManager implements AutoCloseable {
                 END IF;
             END $$;
         """;
+
             statement.execute(checkTypeSql);
             String createTableSql = """
             CREATE TABLE IF NOT EXISTS cars (
@@ -42,7 +44,47 @@ public class MyDbManager implements AutoCloseable {
             """;
             statement.executeUpdate(createTableSql);
         }
-        catch(SQLException e){
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void generateInitialValues() {
+        try(Statement statement = connection.createStatement()) {
+            String createValuesSql = """
+                    INSERT INTO cars (id, manufacturer, name, engine_capacity, production_year, colour, type)
+                    VALUES
+                        (1, 'Toyota', 'Corolla', 1, 2020, 'White', 'sedan'),
+                        (2, 'Volkswagen', 'Golf', 1, 2019, 'Blue', 'hatchback'),
+                        (3, 'Ford', 'Focus', 2, 2021, 'Red', 'station wagon'),
+                        (4, 'Honda', 'Civic', 3, 2022, 'Black', 'sedan'),
+                        (5, 'Hyundai', 'i30', 1, 2018, 'Silver', 'hatchback'),
+                        (6, 'BMW', '3 Series Touring', 2, 2023, 'Gray', 'station wagon'),
+                        (7, 'Mazda', '6', 2, 2021, 'Red', 'sedan'),
+                        (8, 'Honda', 'Jazz', 2, 2021, 'Red', 'sedan'),
+                        (9, 'Volkswagen', 'Passat', 2, 2020, 'White', 'station wagon'),
+                        (10, 'Ford', 'Mondeo', 1, 2018, 'Silver', 'sedan'),
+                        (11, 'Honda', 'Jazz', 3, 2019, 'Blue', 'hatchback'),
+                        (12, 'Hyundai', 'Elantra', 1, 2021, 'Gray', 'sedan'),
+                        (13, 'BMW', 'X1', 3, 2023, 'Black', 'station wagon'),
+                        (14, 'Mazda', 'CX-5', 2, 2022, 'Red', 'hatchback');
+            """;
+            statement.executeUpdate(createValuesSql);
+        }
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void executeTasks() throws SQLException {
+        try {
+//            TaskExecutor taskExecutor = new TaskExecutor2(connection);
+//            TaskExecutor taskExecutor = new TaskExecutor3(connection);
+//            TaskExecutor taskExecutor = new TaskExecutor4(connection);
+            TaskExecutor taskExecutor = new TaskExecutor5(connection);
+            taskExecutor.executeTasks();
+        }
+        catch(SQLException e) {
             System.out.println(e.getMessage());
         }
     }

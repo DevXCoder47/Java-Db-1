@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) {
         try(MyDbManager manager = new MyDbManager("jdbc:postgresql://localhost:5432/autos", "postgres", "")){
-            manager.createAutosTable();
+            manager.executeTasks();
         }
         catch(Exception e){
             System.out.println(e.getMessage());
